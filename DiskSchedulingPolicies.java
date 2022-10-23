@@ -25,7 +25,8 @@ public class DiskSchedulingPolicies {
      *      does not include the beginning position of the arm or any policy-specific locations,
      *      such as SCAN going all the way to the last track
      */
-    private static void averageOfDistances(List<Integer> locations, int locationsRequestedCount) {
+    private static void averageOfDistances(List<Integer> locations, int locationsRequestedCount)
+    {
         if (locations.isEmpty()) {
             System.out.println("Average tracks traversed per request: 0");
             return;
@@ -42,12 +43,14 @@ public class DiskSchedulingPolicies {
         System.out.printf("Average tracks traversed per request: %f\n", averageTracksTraversed);
     }
 
-    private static List<Integer> fifoOrder(List<Integer> requests) {
+    private static List<Integer> fifoOrder(List<Integer> requests)
+    {
         System.out.printf("FIFO order: %s\n", requests);
         return requests;
     }
 
-    private static List<Integer> sstfOrder(List<Integer> requests) {
+    private static List<Integer> sstfOrder(List<Integer> requests)
+    {
         final int startingLocation = requests.get(0);
         final List<Integer> sortedLocations = requests.stream()
                 .sorted()
@@ -87,7 +90,8 @@ public class DiskSchedulingPolicies {
      * Because of this, the result is not exactly the same as in Stallings,
      * where it stops at the highest and lowest location requested.
      */
-    private static List<Integer> scanOrder(List<Integer> requests, Integer numberOfTracks) {
+    private static List<Integer> scanOrder(List<Integer> requests, Integer numberOfTracks)
+    {
         if (numberOfTracks == null) {
             throw new IllegalArgumentException();
         }
@@ -113,14 +117,18 @@ public class DiskSchedulingPolicies {
         return scanLocations;
     }
 
-    public static void averageTracksTraversed(String requests, int startingLocation, Policy policy) {
+    public static void averageTracksTraversed(String requests, int startingLocation, Policy policy)
+    {
         averageTracksTraversed(requests, startingLocation, policy, null);
     }
 
-    public static void averageTracksTraversed(String requests, int startingLocation, Policy policy,
-            Integer numberOfTracks) {
+    public static void averageTracksTraversed(String requests,
+                                              int startingLocation,
+                                              Policy policy,
+                                              Integer numberOfTracks)
+    {
         List<Integer> requestsList = Stream.concat(Stream.of(String.valueOf(startingLocation)),
-                Arrays.stream(requests.split(" ")))
+                                                   Arrays.stream(requests.split(" ")))
                 .filter(s -> !s.isBlank())
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
@@ -128,18 +136,21 @@ public class DiskSchedulingPolicies {
         switch (policy) {
             case FIFO -> averageOfDistances(fifoOrder(requestsList), locationsRequestedCount);
             case SSTF -> averageOfDistances(sstfOrder(requestsList), locationsRequestedCount);
-            case SCAN -> averageOfDistances(scanOrder(requestsList, numberOfTracks), locationsRequestedCount);
+            case SCAN -> averageOfDistances(scanOrder(requestsList, numberOfTracks),
+                                            locationsRequestedCount);
             default -> throw new IllegalArgumentException();
         }
     }
 
-    public static void allPolicies(String locationsRequested, int startingLocation, int numberOfTracks) {
+    public static void allPolicies(String locationsRequested,
+                                   int startingLocation,
+                                   int numberOfTracks)
+    {
         System.out.printf("""
                 Locations requested: %s
                 Starting location: %s
                 Number of tracks: %s\n
-                """,
-                locationsRequested, startingLocation, numberOfTracks);
+                """, locationsRequested, startingLocation, numberOfTracks);
         averageTracksTraversed(locationsRequested, startingLocation, Policy.FIFO);
         System.out.println();
         averageTracksTraversed(locationsRequested, startingLocation, Policy.SSTF);
@@ -148,8 +159,8 @@ public class DiskSchedulingPolicies {
         System.out.println();
     }
 
-    public static void main(String[] args) {
-        // System.out.println(Arrays.toString(args));
+    public static void main(String[] args)
+    {
         switch (args.length) {
             case 0 -> {
                 System.out.println("No arguments passed, using default values.");
