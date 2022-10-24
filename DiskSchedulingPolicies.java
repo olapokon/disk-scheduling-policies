@@ -85,10 +85,10 @@ public class DiskSchedulingPolicies {
     }
 
     /**
-     * Following the course material, SCAN goes all the way to the last track and all the way to the first track.
+     * SCAN goes all the way to the last track and all the way to the first track.
      *
-     * Because of this, the result is not exactly the same as in Stallings,
-     * where it stops at the highest and lowest location requested.
+     * In the "Comparison of Disk Scheduling Algorithms" table in Stallings,
+     * the SCAN column is actually the LOOK policy, an optimization on SCAN, so the result is different.
      */
     private static List<Integer> scanOrder(List<Integer> requests, Integer numberOfTracks)
     {
