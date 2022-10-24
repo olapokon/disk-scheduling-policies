@@ -22,7 +22,7 @@ public class DiskSchedulingPolicies {
      *      they differ depending on the policy being used
      * @param locationsRequestedCount
      *      the number of locations requested,
-     *      does not include the beginning position of the arm or any policy-specific locations,
+     *      must not include the beginning position of the arm or any policy-specific locations,
      *      such as SCAN going all the way to the last track
      */
     private static void averageOfDistances(List<Integer> locations, int locationsRequestedCount)
@@ -38,7 +38,7 @@ public class DiskSchedulingPolicies {
             final int distance = Math.abs(loc1 - loc2);
             distancesSum += distance;
         }
-        System.out.printf("Sum of distances: %d\n", distancesSum);
+        System.out.printf("Total track traversals: %d\n", distancesSum);
         final double averageTracksTraversed = (double) distancesSum / locationsRequestedCount;
         System.out.printf("Average tracks traversed per request: %f\n", averageTracksTraversed);
     }
@@ -99,7 +99,7 @@ public class DiskSchedulingPolicies {
         final List<Integer> sortedLocations = requests.stream()
                 .sorted()
                 .toList();
-        int startingLocationIdx = Collections.binarySearch(sortedLocations, startingLocation);
+        final int startingLocationIdx = Collections.binarySearch(sortedLocations, startingLocation);
 
         final List<Integer> scanLocations = new ArrayList<>();
         // add all locations starting from the starting location to the highest requested location
@@ -131,8 +131,8 @@ public class DiskSchedulingPolicies {
                                                    Arrays.stream(requests.split(" ")))
                 .filter(s -> !s.isBlank())
                 .map(Integer::parseInt)
-                .collect(Collectors.toList());
-        int locationsRequestedCount = requestsList.size() - 1; // do not count starting location
+                .toList();
+        final int locationsRequestedCount = requestsList.size() - 1; // do not count starting location
         switch (policy) {
             case FIFO -> averageOfDistances(fifoOrder(requestsList), locationsRequestedCount);
             case SSTF -> averageOfDistances(sstfOrder(requestsList), locationsRequestedCount);
