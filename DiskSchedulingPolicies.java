@@ -104,14 +104,20 @@ public class DiskSchedulingPolicies {
         final List<Integer> scanLocations = new ArrayList<>();
         // add all locations starting from the starting location to the highest requested location
         scanLocations.addAll(sortedLocations.subList(startingLocationIdx, sortedLocations.size()));
-        // add the last track
-        scanLocations.add(numberOfTracks - 1);
+        if (scanLocations.get(scanLocations.size() - 1) != numberOfTracks - 1) {
+            // add the last track
+            // if the highest requested location is not the last track
+            scanLocations.add(numberOfTracks - 1);
+        }
         // add all locations from the starting locations to the lowest requested location
         for (int i = startingLocationIdx - 1; i >= 0; --i) {
             scanLocations.add(sortedLocations.get(i));
         }
-        // add the first track
-        scanLocations.add(0);
+        if (scanLocations.get(scanLocations.size() - 1) != 0) {
+            // add the first track
+            // if the lowest requested location is not the first track
+            scanLocations.add(0);
+        }
 
         System.out.printf("SCAN order: %s\n", scanLocations);
         return scanLocations;
@@ -127,8 +133,9 @@ public class DiskSchedulingPolicies {
                                               Policy policy,
                                               Integer numberOfTracks)
     {
-        List<Integer> requestsList = Stream.concat(Stream.of(String.valueOf(startingLocation)),
-                                                   Arrays.stream(requests.split(" ")))
+        final List<Integer> requestsList = Stream
+                .concat(Stream.of(String.valueOf(startingLocation)),
+                        Arrays.stream(requests.split(" ")))
                 .filter(s -> !s.isBlank())
                 .map(Integer::parseInt)
                 .toList();
