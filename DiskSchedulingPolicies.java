@@ -42,11 +42,14 @@ public class DiskSchedulingPolicies {
             return;
         }
         int distancesSum = 0;
+        // System.out.println("Total tracks\tLocations");
+        // System.out.printf("%d\t\t%d\n", distancesSum, locations.get(0));
         for (int i = 1; i < locations.size(); ++i) {
             final int loc1 = locations.get(i - 1);
             final int loc2 = locations.get(i);
             final int distance = Math.abs(loc1 - loc2);
             distancesSum += distance;
+            // System.out.printf("%d\t\t%d\n", distancesSum, loc2);
         }
         System.out.printf("Total track traversals: %d\n", distancesSum);
         final double averageTracksTraversed = (double) distancesSum / locationsRequestedCount;
@@ -63,9 +66,7 @@ public class DiskSchedulingPolicies {
     private static List<Integer> sstfOrder(List<Integer> requests)
     {
         final int startingLocation = requests.get(0);
-        final List<Integer> sortedLocations = requests.stream()
-                .sorted()
-                .toList();
+        final List<Integer> sortedLocations = requests.stream().sorted().toList();
 
         final List<Integer> sstfLocations = new ArrayList<>();
         sstfLocations.add(startingLocation);
@@ -172,8 +173,8 @@ public class DiskSchedulingPolicies {
             case CLOOK -> "C-LOOK";
             default -> policy.name();
         };
-        String policyText = ANSI_GREEN + policyName + ANSI_RESET;
-        System.out.printf("%s order: %s\n", policyText, order);
+        policyName = ANSI_GREEN + policyName + ANSI_RESET;
+        System.out.printf("%s order: %s\n", policyName, order);
     }
 
     public static void averageTracksTraversed(String requests, int startingLocation, Policy policy)
