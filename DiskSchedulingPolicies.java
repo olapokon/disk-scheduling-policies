@@ -51,9 +51,9 @@ public class DiskSchedulingPolicies {
             distancesSum += distance;
             // System.out.printf("%d\t\t%d\n", distancesSum, loc2);
         }
-        System.out.printf("Total track traversals: %d\n", distancesSum);
+        System.out.printf("Total track traversals: %d%n", distancesSum);
         final double averageTracksTraversed = (double) distancesSum / locationsRequestedCount;
-        System.out.printf("Average tracks traversed per request: %s%f%s\n",
+        System.out.printf("Average tracks traversed per request: %s%f%s%n",
                           ANSI_PURPLE, averageTracksTraversed, ANSI_RESET);
     }
 
@@ -174,7 +174,7 @@ public class DiskSchedulingPolicies {
             default -> policy.name();
         };
         policyName = ANSI_GREEN + policyName + ANSI_RESET;
-        System.out.printf("%s order: %s\n", policyName, order);
+        System.out.printf("%s order: %s%n", policyName, order);
     }
 
     public static void averageTracksTraversed(String requests, int startingLocation, Policy policy)
@@ -216,7 +216,7 @@ public class DiskSchedulingPolicies {
         System.out.printf("""
                 Locations requested: %s
                 Starting location: %s
-                Number of tracks: %s\n
+                Number of tracks: %s%n
                 """, locationsRequested, startingLocation, numberOfTracks);
         averageTracksTraversed(locationsRequested, startingLocation, Policy.FIFO);
         System.out.println();
@@ -237,6 +237,7 @@ public class DiskSchedulingPolicies {
         switch (args.length) {
             case 0 -> {
                 System.out.println("No arguments passed, using default values.");
+                System.out.println("Usage with arguments: disk-scheduling-policies <requests> <starting location> <number of tracks>");
                 final String locationsRequested = "55 58 39 18 90 160 150 38 184";
                 final int startingLocation = 100;
                 final int numberOfTracks = 200;
