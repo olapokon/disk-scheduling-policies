@@ -22,9 +22,18 @@ public class DiskSchedulingPolicies {
         CLOOK,
     }
 
+    enum AnsiColor {
+        GREEN("\u001B[32m"),
+        PURPLE("\u001B[35m");
+
+        private final String ansiEscapeSequence;
+
+        AnsiColor(String ansiEscapeSequence) {
+            this.ansiEscapeSequence = ansiEscapeSequence;
+        }
+    }
+
     private static final String ANSI_RESET = "\u001B[0m";
-    private static final String ANSI_GREEN = "\u001B[32m";
-    private static final String ANSI_PURPLE = "\u001B[35m";
 
     /**
      * @param locations
@@ -53,8 +62,8 @@ public class DiskSchedulingPolicies {
         }
         System.out.printf("Total track traversals: %d%n", distancesSum);
         final double averageTracksTraversed = (double) distancesSum / locationsRequestedCount;
-        System.out.printf("Average tracks traversed per request: %s%f%s%n",
-                          ANSI_PURPLE, averageTracksTraversed, ANSI_RESET);
+        System.out.printf("Average tracks traversed per request: %s%n",
+                addAnsiColor(String.valueOf(averageTracksTraversed), AnsiColor.PURPLE));
     }
 
     private static List<Integer> fifoOrder(List<Integer> requests)
@@ -173,8 +182,13 @@ public class DiskSchedulingPolicies {
             case CLOOK -> "C-LOOK";
             default -> policy.name();
         };
-        policyName = ANSI_GREEN + policyName + ANSI_RESET;
+        policyName = addAnsiColor(policyName, AnsiColor.GREEN);
         System.out.printf("%s order: %s%n", policyName, order);
+    }
+
+    private static String addAnsiColor(String s, AnsiColor color)
+    {
+        return color.ansiEscapeSequence + s + ANSI_RESET;
     }
 
     public static void averageTracksTraversed(String requests, int startingLocation, Policy policy)
